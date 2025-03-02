@@ -19,8 +19,8 @@ class MonteCarloOnPolicyAgent(Agent):
         - epsilon: parámetro para la política ε-soft, controlando la exploración.
         - decay: si es True, el valor de ε disminuye a medida que avanza el entrenamiento.
         """
-        super().__init__(env)
-        
+        #super().__init__(env)
+        self.env = env
         self.gamma = gamma  # Factor de descuento
         self.epsilon = epsilon  # Exploración epsilon-greedy
         self.decay = decay  # Control de decaimiento de epsilon
