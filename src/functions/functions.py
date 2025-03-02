@@ -66,13 +66,13 @@ def pi_star_from_Q(env, Q):
 
 
 def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000):
-    for episode in range(0, num_episodes, 1000):
-        env = RecordVideo(env, video_folder=video_folder, episode_trigger=lambda eid: True)
-        print(f"Grabando episodio {episode + 1}...")
-        done = False
-        pi_star = np.zeros([env.observation_space.n, env.action_space.n])
-        state, info = env.reset()
-        actions = f"Episodio {episode + 1}: "
+    
+    env = RecordVideo(env, video_folder=video_folder, episode_trigger=lambda eid: True)
+    print(f"Grabando ejecución...")
+    done = False
+    pi_star = np.zeros([env.observation_space.n, env.action_space.n])
+    state, info = env.reset()
+    actions = ""
 
         while not done:
             env.render()
@@ -82,7 +82,7 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
             state, reward, terminated, truncated, info = env.step(action)
             done = terminated or truncated
 
-        print(f"Episodio {episode + 1} completado.")
+        print(f"Grabación completada.")
         env.close()
 
     return pi_star, actions
