@@ -13,7 +13,6 @@ from IPython.display import HTML
 
 # Para renderizar correctamente en algunos entornos
 import imageio
-import moviepy.editor as mpy
 
 # Definición de acciones
 LEFT, DOWN, RIGHT, UP = 0, 1, 2, 3
