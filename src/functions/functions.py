@@ -15,9 +15,6 @@ from IPython.display import HTML
 import imageio
 import moviepy.editor as mpy
 
-display = Display(visible=0, size=(1400, 900))
-display.start()
-
 # Definición de acciones
 LEFT, DOWN, RIGHT, UP = 0, 1, 2, 3
 
