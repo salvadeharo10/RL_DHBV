@@ -79,14 +79,14 @@ def plot_episode_lengths(episode_lengths):
     plt.show()
 
 
-def monte_carlo_on_policy(agent, env, num_episodes=5000, SEED):
+def monte_carlo_on_policy(agent, env, num_episodes=5000, semilla):
     stats = 0.0
     list_stats = [stats]
     episode_lengths = []
     step_display = max(1, num_episodes // 10)
 
     for t in tqdm(range(num_episodes), disable=False):
-        state, info = env.reset(seed=SEED)
+        state, info = env.reset(seed=semilla)
         done = False
         episode = []
         result_sum = 0.0
