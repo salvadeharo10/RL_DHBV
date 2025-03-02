@@ -54,7 +54,7 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
 
 def display_gif(gif_path):
     """
-    Muestra un GIF en Google Colab.
+    Muestra un GIF en Google Colab o Jupyter Notebook.
 
     Parámetros:
       - gif_path (str): Ruta del archivo GIF.
@@ -63,12 +63,15 @@ def display_gif(gif_path):
       - HTML: Objeto HTML que contiene el GIF incrustado.
     """
     # Abrir el archivo GIF en modo binario.
-    with open(gif_path, 'rb') as f:
+    with open(gif_path, "rb") as f:
         video = f.read()
-    # Convertir el contenido del GIF a una cadena Base64.
-    b64 = base64.b64encode(video)
-    # Retornar el objeto HTML que muestra el GIF.
-    return HTML(f'')
+    
+    # Convertir el contenido del GIF a una cadena Base64 y decodificarlo como string
+    b64 = base64.b64encode(video).decode("utf-8")  
+
+    # Retornar el objeto HTML con el GIF embebido
+    return HTML(f'<img src="data:image/gif;base64,{b64}" />')
+    
 
 def frames_to_gif(frames, filename="cartpole_sarsa.gif"):
     """
