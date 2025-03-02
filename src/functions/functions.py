@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from scipy.ndimage import uniform_filter1d
-from agentes.agent import Agent
+from agentes import Agent, MonteCarloOnPolicyAgent, MonteCarloOffPolicyAgent, AgentSarsa, AgentQLearning, SemiGradientSarsaAgent
 
 # Para grabar videosrom gymnasium.wrappers import RecordVideo
 
