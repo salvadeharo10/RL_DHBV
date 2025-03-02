@@ -44,7 +44,7 @@ class MonteCarloOnPolicyAgent(Agent):
         - Acción seleccionada según la política ε-soft.
         """
         if self.decay:
-            self.epsilon = min(self.epsilon, 1000.0 / (n + 1))
+            self.epsilon = min(1, 1000.0 / (n + 1))
         
         action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.env.action_space.n)
         best_action = np.argmax(self.Q[state])
