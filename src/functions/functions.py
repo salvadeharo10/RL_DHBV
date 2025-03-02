@@ -79,7 +79,7 @@ def plot_episode_lengths(episode_lengths):
     plt.show()
 
 
-def monte_carlo_on_policy(agent, env, num_episodes=5000, semilla):
+def monte_carlo_on_policy(agent, env, semilla, num_episodes=5000):
     stats = 0.0
     list_stats = [stats]
     episode_lengths = []
