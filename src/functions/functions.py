@@ -74,16 +74,16 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
     state, info = env.reset()
     actions = ""
 
-        while not done:
-            env.render()
-            action = np.argmax(Q[state, :])
-            actions += f"{action}, "
-            pi_star[state, action] = action
-            state, reward, terminated, truncated, info = env.step(action)
-            done = terminated or truncated
+    while not done:
+        env.render()
+        action = np.argmax(Q[state, :])
+        actions += f"{action}, "
+        pi_star[state, action] = action
+        state, reward, terminated, truncated, info = env.step(action)
+        done = terminated or truncated
 
-        print(f"Grabación completada.")
-        env.close()
+    print(f"Grabación completada.")
+    env.close()
 
     return pi_star, actions
 
