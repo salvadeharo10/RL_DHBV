@@ -1,7 +1,7 @@
 import numpy as np
 import gymnasium as gym
 from typing import List, Tuple
-from agent import Agent  # Importamos la clase base Agent desde su módulo
+from agentes import Agent  # Importamos la clase base Agent desde su módulo
 
 # Clase Monte Carlo Off-Policy Agent
 class MonteCarloOffPolicyAgent(Agent):
