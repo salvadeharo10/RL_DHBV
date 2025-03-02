@@ -4,7 +4,6 @@ import os
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from scipy.ndimage import uniform_filter1d
-from agentes import Agent, MonteCarloOnPolicyAgent, MonteCarloOffPolicyAgent, AgentSarsa, AgentQLearning, SemiGradientSarsaAgent
 
 # Para grabar videosrom gymnasium.wrappers import RecordVideo
 
@@ -77,38 +76,5 @@ def plot_episode_lengths(episode_lengths):
     plt.legend()
     plt.grid(True)
     plt.show()
-
-
-def monte_carlo_on_policy(agent, env, semilla, num_episodes=5000):
-    stats = 0.0
-    list_stats = [stats]
-    episode_lengths = []
-    step_display = max(1, num_episodes // 10)
-
-    for t in tqdm(range(num_episodes), disable=False):
-        state, info = env.reset(seed=semilla)
-        done = False
-        episode = []
-        result_sum = 0.0
-        length = 0
-
-        while not done:
-            action = agent.get_action(state, t)
-            next_state, reward, terminated, truncated, info = env.step(action)
-            episode.append((state, action, reward))
-            state = next_state
-            done = terminated or truncated
-            result_sum += reward
-            length += 1
-
-        agent.update(episode)
-        episode_lengths.append(length)
-        stats += result_sum
-        list_stats.append(stats / (t + 1))
-
-        if t % step_display == 0 and t != 0:
-            print(f"Éxito promedio: {stats/t}, epsilon: {agent.epsilon:.4f}")
-
-    return agent.Q, list_stats, episode_lengths
 
 
