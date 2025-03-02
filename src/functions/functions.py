@@ -22,11 +22,17 @@ display.start()
 LEFT, DOWN, RIGHT, UP = 0, 1, 2, 3
 
 # Función para mostrar videos en el notebook
+# Esta función mostrará un vídeos en la pantalla virtual, que será embembida en el notbook
 def embed_video(video_file):
+    # open and read the raw data from the video
     video_data = io.open(video_file, 'r+b').read()
+    # now we have to encode the data into base64 to work
+    # with the virtual display
     encoded_data = base64.b64encode(video_data)
-    display.display(HTML(data=f'<video controls><source src="data:video/mp4;base64,{encoded_data.decode("ascii")}" type="video/mp4"></video>'))
-
+    # now we use the display.display function to take some html
+    # and the encoded data and embed the html into the notebook!
+    display.display(HTML(data=''''''.format(encoded_data.decode('ascii'))))
+    
 # Función para obtener el último video generado
 def get_latest_episode_video_file(directory):
     import re
