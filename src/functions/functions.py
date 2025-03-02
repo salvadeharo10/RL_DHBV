@@ -70,9 +70,10 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
     pi_star = np.zeros([env.observation_space.n, env.action_space.n])
     state, info = env.reset()
     actions = ""
-
+    frames = []  # Lista para almacenar cada fotograma.
     while not done:
-        env.render()
+        frame = env.render()
+        frames.append(frame)
         action = np.argmax(Q[state, :])
         actions += f"{action}, "
         pi_star[state, action] = action
@@ -82,8 +83,45 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
     print(f"Grabación completada.")
     env.close()
 
-    return pi_star, actions
+    return pi_star, actions, frames
 
+def display_gif(gif_path):
+    """
+    Muestra un GIF en Google Colab.
+
+    Parámetros:
+      - gif_path (str): Ruta del archivo GIF.
+
+    Retorna:
+      - HTML: Objeto HTML que contiene el GIF incrustado.
+    """
+    # Abrir el archivo GIF en modo binario.
+    with open(gif_path, 'rb') as f:
+        video = f.read()
+    # Convertir el contenido del GIF a una cadena Base64.
+    b64 = base64.b64encode(video)
+    # Retornar el objeto HTML que muestra el GIF.
+    return HTML(f'')
+
+def frames_to_gif(frames, filename="cartpole_sarsa.gif"):
+    """
+    Crea un archivo GIF a partir de una lista de fotogramas.
+
+    Parámetros:
+      - frames (list): Lista de fotogramas (imágenes) capturados del entorno.
+      - filename (str): Nombre del archivo GIF resultante.
+
+    Retorna:
+      - str: Nombre del archivo GIF creado.
+    """
+    # Abrir un escritor de GIF con imageio.
+    with imageio.get_writer(filename, mode='I') as writer:
+        # Agregar cada fotograma al GIF.
+        for frame in frames:
+            writer.append_data(frame)
+    return filename
+    
+    
 
 def plot(list_stats):
     indices = list(range(len(list_stats)))
