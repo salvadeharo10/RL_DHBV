@@ -1,6 +1,6 @@
 import numpy as np
 import gymnasium as gym
-from agent import Agent  # Importamos la clase base Agent desde su módulo
+from agentes import Agent  # Importamos la clase base Agent desde su módulo
 
 class SemiGradientSarsaAgent(Agent):
     """
