@@ -4,15 +4,45 @@ import os
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from scipy.ndimage import uniform_filter1d
-
-# Para grabar videosrom gymnasium.wrappers import RecordVideo
+from pyvirtualdisplay import Display
+from gymnasium.wrappers import RecordVideo
+import io
+import base64
+from IPython import display
+from IPython.display import HTML
 
 # Para renderizar correctamente en algunos entornos
 import imageio
 import moviepy.editor as mpy
 
+display = Display(visible=0, size=(1400, 900))
+display.start()
+
 # Definición de acciones
 LEFT, DOWN, RIGHT, UP = 0, 1, 2, 3
+
+# Función para mostrar videos en el notebook
+def embed_video(video_file):
+    video_data = io.open(video_file, 'r+b').read()
+    encoded_data = base64.b64encode(video_data)
+    display.display(HTML(data=f'<video controls><source src="data:video/mp4;base64,{encoded_data.decode("ascii")}" type="video/mp4"></video>'))
+
+# Función para obtener el último video generado
+def get_latest_episode_video_file(directory):
+    import re
+    pattern = re.compile(r"rl-video-episode-(\d+)\.mp4")
+    latest_file = None
+    highest_episode = -1
+
+    for filename in os.listdir(directory):
+        match = pattern.match(filename)
+        if match:
+            episode_number = int(match.group(1))
+            if episode_number > highest_episode:
+                highest_episode = episode_number
+                latest_file = os.path.join(directory, filename)
+
+    return latest_file
 
 # Política Greedy a partir de los valores Q. Se usa para mostrar la solución.
 def pi_star_from_Q(env, Q):
