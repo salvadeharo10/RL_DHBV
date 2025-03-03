@@ -175,7 +175,7 @@ def plot_q_values_map(qtable, env, map_size):
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
 
     # Última imagen del entorno
-    last_frame = env.render(mode="rgb_array")
+    last_frame = env.render()
     ax[0].imshow(last_frame)
     ax[0].axis("off")
     ax[0].set_title("Último frame del entorno")
