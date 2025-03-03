@@ -32,7 +32,6 @@ def pi_star_from_Q(env, Q):
 
 
 def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000):
-    
     print(f"Grabando ejecución...")
     done = False
     pi_star = np.zeros([env.observation_space.n, env.action_space.n])
@@ -53,10 +52,15 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
         visited_states.append(state)  # Guardar estado
         done = terminated or truncated
 
+    # Renderizar el último frame antes de cerrar el entorno
+    last_frame = env.render()
+    frames.append(last_frame)
+
     print(f"Grabación completada.")
     env.close()
 
     return pi_star, actions, frames, actions_list, visited_states
+
 
 def display_gif(gif_path):
     """
