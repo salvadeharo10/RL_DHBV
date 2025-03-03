@@ -29,7 +29,7 @@ class MonteCarloOffPolicyAgent(Agent):
         self.C = np.zeros((env.observation_space.n, env.action_space.n))
         self.policy = np.zeros(env.observation_space.n, dtype=int)
 
-    def get_action(self, state: int, n: int) -> int:
+    def get_action(self, state: int) -> int:
         """
         Selecciona una acción siguiendo una política ε-soft.
         
@@ -48,7 +48,7 @@ class MonteCarloOffPolicyAgent(Agent):
         return np.random.choice(self.env.action_space.n, p=action_probabilities)
 
 
-    def update(self, episode: List[Tuple[int, int, float]]) -> None:
+    def update(self, episode: List[Tuple[int, int, float]], n: int) -> None:
         """
         Actualiza la tabla Q(s, a) usando Monte Carlo Off-Policy con Importance Sampling.
     
