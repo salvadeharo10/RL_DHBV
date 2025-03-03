@@ -162,10 +162,22 @@ def plot_states_actions_distribution(states, actions, map_size):
 def qtable_directions_map(qtable, map_size):
     """Convierte la Q-table en una matriz de valores y direcciones óptimas."""
     arrows = {0: "←", 1: "↓", 2: "→", 3: "↑"}  # Mapeo de acciones a flechas
-    qtable_val_max = np.max(qtable, axis=1).reshape(map_size, map_size)  # Mejor valor Q por estado
-    best_actions = np.argmax(qtable, axis=1).reshape(map_size, map_size)  # Mejor acción por estado
-    qtable_directions = np.vectorize(arrows.get)(best_actions)  # Convertir acciones en flechas
+
+    # Encontrar el mejor valor Q por estado
+    qtable_val_max = np.max(qtable, axis=1).reshape(map_size, map_size)
+
+    # Inicializar matriz de flechas vacía
+    qtable_directions = np.full((map_size, map_size), "", dtype=object)
+
+    # Asignar flechas solo si el estado tiene valores Q distintos de 0
+    for i in range(qtable.shape[0]):
+        if not np.all(qtable[i] == 0):  # Si hay algún valor diferente de 0
+            best_action = np.argmax(qtable[i])  # Obtener la mejor acción
+            row, col = divmod(i, map_size)  # Convertir índice lineal a 2D
+            qtable_directions[row, col] = arrows[best_action]  # Asignar flecha
+
     return qtable_val_max, qtable_directions
+
 
 def plot_q_values_map(qtable, env, map_size):
     """Grafica el último frame de la simulación y la política aprendida."""
