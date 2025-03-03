@@ -8,6 +8,7 @@ import io
 import base64
 from IPython import display
 from IPython.display import HTML
+import seaborn as sns
 
 # Para renderizar correctamente en algunos entornos
 import imageio
@@ -38,19 +39,24 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
     state, info = env.reset()
     actions = ""
     frames = []  # Lista para almacenar cada fotograma.
+    actions_list = []  # Lista de acciones tomadas
+    visited_states = []  # Lista de estados visitados
+
     while not done:
         frame = env.render()
         frames.append(frame)
         action = np.argmax(Q[state, :])
         actions += f"{action}, "
+        actions_list.append(action)  # Guardar acción
         pi_star[state, action] = action
         state, reward, terminated, truncated, info = env.step(action)
+        visited_states.append(state)  # Guardar estado
         done = terminated or truncated
 
     print(f"Grabación completada.")
     env.close()
 
-    return pi_star, actions, frames
+    return pi_star, actions, frames, actions_list, visited_states
 
 def display_gif(gif_path):
     """
@@ -118,4 +124,83 @@ def plot_episode_lengths(episode_lengths):
     plt.grid(True)
     plt.show()
 
+# Función para visualizar la distribución de estados y acciones
+def plot_states_actions_distribution(states, actions, map_size):
+    """Dibuja la distribución de estados visitados y acciones tomadas."""
 
+    labels = {"LEFT": 0, "DOWN": 1, "RIGHT": 2, "UP": 3}
+
+    # Convertir a listas si son arrays
+    states = np.array(states).flatten()
+    actions = np.array(actions).astype(int).flatten()
+
+    # Crear figura con 2 gráficos
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
+
+    # Histograma de estados visitados
+    sns.histplot(data=states, ax=ax[0], kde=True, bins=map_size**2, color="skyblue")
+    ax[0].set_title("Distribución de Estados")
+    ax[0].set_xlabel("Estados")
+    ax[0].set_ylabel("Frecuencia")
+
+    # Histograma de acciones tomadas
+    sns.histplot(data=actions, ax=ax[1], bins=4, color="orange")
+    ax[1].set_xticks(list(labels.values()))
+    ax[1].set_xticklabels(labels.keys())
+    ax[1].set_title("Distribución de Acciones")
+    ax[1].set_xlabel("Acciones")
+    ax[1].set_ylabel("Frecuencia")
+
+    # Ajustar diseño
+    fig.tight_layout()
+
+    # Guardar la imagen
+    img_title = f"frozenlake_states_actions_distrib_{map_size}x{map_size}.png"
+    plt.savefig(img_title, bbox_inches="tight")
+    plt.show()
+
+def qtable_directions_map(qtable, map_size):
+    """Convierte la Q-table en una matriz de valores y direcciones óptimas."""
+    arrows = {0: "←", 1: "↓", 2: "→", 3: "↑"}  # Mapeo de acciones a flechas
+    qtable_val_max = np.max(qtable, axis=1).reshape(map_size, map_size)  # Mejor valor Q por estado
+    best_actions = np.argmax(qtable, axis=1).reshape(map_size, map_size)  # Mejor acción por estado
+    qtable_directions = np.vectorize(arrows.get)(best_actions)  # Convertir acciones en flechas
+    return qtable_val_max, qtable_directions
+
+def plot_q_values_map(qtable, env, map_size):
+    """Grafica el último frame de la simulación y la política aprendida."""
+    qtable_val_max, qtable_directions = qtable_directions_map(qtable, map_size)
+
+    # Crear figura con dos subgráficos
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
+
+    # Última imagen del entorno
+    last_frame = env.render(mode="rgb_array")
+    ax[0].imshow(last_frame)
+    ax[0].axis("off")
+    ax[0].set_title("Último frame del entorno")
+
+    # Mapa de valores de Q con la política aprendida
+    sns.heatmap(
+        qtable_val_max,
+        annot=qtable_directions,
+        fmt="",
+        ax=ax[1],
+        cmap=sns.color_palette("Blues", as_cmap=True),
+        linewidths=0.7,
+        linecolor="black",
+        xticklabels=[],
+        yticklabels=[],
+        annot_kws={"fontsize": "xx-large"},
+    ).set(title="Valores de Q aprendidos\n(Flechas indican la mejor acción)")
+
+    # Ajustes de los bordes
+    for _, spine in ax[1].spines.items():
+        spine.set_visible(True)
+        spine.set_linewidth(0.7)
+        spine.set_color("black")
+
+    # Guardar imagen
+    img_title = f"frozenlake_q_values_{map_size}x{map_size}.png"
+    plt.savefig(img_title, bbox_inches="tight")
+    plt.show()
