@@ -19,7 +19,7 @@ class MonteCarloOffPolicyAgent(Agent):
         - epsilon: probabilidad de exploración en la política ε-soft.
         - decay: si es True, el valor de ε disminuye a medida que avanza el entrenamiento.
         """
-        super().__init__(env)
+        self.env = env
         self.gamma = gamma
         self.epsilon = epsilon
         self.decay = decay
