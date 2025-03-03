@@ -40,10 +40,7 @@ class MonteCarloOffPolicyAgent(Agent):
         Retorna:
         - Acción seleccionada según la política ε-soft.
         """
-        if self.decay:
-            self.epsilon = min(1, 5000.0 / (n + 1))
 
-        
         action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.env.action_space.n)
         best_action = self.policy[state]
         action_probabilities[best_action] += (1 - self.epsilon)
@@ -80,3 +77,5 @@ class MonteCarloOffPolicyAgent(Agent):
             b_prob = self.epsilon / self.env.action_space.n + (1 - self.epsilon) * (action == self.policy[state])
             W = W / b_prob  # W ← W / b(A_t | S_t)
 
+        if self.decay:
+            self.epsilon = min(1, 5000.0 / (n + 1))
