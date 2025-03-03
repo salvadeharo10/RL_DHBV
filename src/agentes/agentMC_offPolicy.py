@@ -78,4 +78,4 @@ class MonteCarloOffPolicyAgent(Agent):
             W = W / b_prob  # W ← W / b(A_t | S_t)
 
         if self.decay:
-            self.epsilon = min(1, 5000.0 / (n + 1))
+            self.epsilon = min(1, 1000.0 / (n + 1))
