@@ -27,6 +27,7 @@ class MonteCarloOffPolicyAgent(Agent):
         # Inicialización de las tablas Q y C (para Importance Sampling)
         self.Q = np.zeros((env.observation_space.n, env.action_space.n))
         self.C = np.zeros((env.observation_space.n, env.action_space.n))
+        self.policy = np.zeros(env.observation_space.n, dtype=int)
 
     def get_action(self, state: int, n: int) -> int:
         """
@@ -43,7 +44,7 @@ class MonteCarloOffPolicyAgent(Agent):
             self.epsilon = min(1, 1000.0 / (n + 1))
         
         action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.env.action_space.n)
-        best_action = np.argmax(self.Q[state])
+        best_action = self.policy[state]
         action_probabilities[best_action] += (1 - self.epsilon)
         
         return np.random.choice(self.env.action_space.n, p=action_probabilities)
@@ -66,12 +67,15 @@ class MonteCarloOffPolicyAgent(Agent):
             # Actualización ponderada de la tabla Q usando Importance Sampling
             self.C[state, action] += W
             self.Q[state, action] += (W / self.C[state, action]) * (G - self.Q[state, action])
+
+            # Actualización de la política óptima
+            self.policy[state] = np.argmax(self.Q[state])  # π(St) ← argmax Q(St, a)
     
             # Si la acción tomada en el episodio no coincide con la nueva acción óptima, se detiene
-            if action != np.argmax(self.Q[state]): # π(St) ← argmax Q(St, a)
+            if action != self.policy[state]: # π(St) ← argmax Q(St, a)
                 break
     
             # Actualización del factor de importancia W
-            b_prob = self.epsilon / self.env.action_space.n + (1 - self.epsilon) * (action == np.argmax(self.Q[state]))
+            b_prob = self.epsilon / self.env.action_space.n + (1 - self.epsilon) * (action == self.policy[state])
             W = W / b_prob  # W ← W / b(A_t | S_t)
 
