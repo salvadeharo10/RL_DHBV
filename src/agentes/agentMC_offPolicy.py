@@ -29,25 +29,26 @@ class MonteCarloOffPolicyAgent(Agent):
         self.C = np.zeros((env.observation_space.n, env.action_space.n))
         self.policy = np.zeros(env.observation_space.n, dtype=int)
 
+
     def get_action(self, state: int, n: int) -> int:
         """
-        Selecciona una acción siguiendo una política ε-greedy.
-
+        Selecciona una acción siguiendo una política ε-soft.
+        
         Parámetros:
         - state: estado actual del agente.
         - n: número de episodios transcurridos (para el decaimiento de ε si está activado).
-
+        
         Retorna:
-        - Acción seleccionada según la política ε-greedy.
+        - Acción seleccionada según la política ε-soft.
         """
         if self.decay:
-            self.epsilon = min(1, 1000.0 / (n + 1))  # Ajuste dinámico de epsilon
+            self.epsilon = min(1, 1000.0 / (n + 1))
 
-        best_action = np.argmax(self.Q[state])  # Elegir la mejor acción según Q
-        if np.random.rand() < self.epsilon:  # Con probabilidad ε, elegir acción aleatoria
-            return np.random.choice(self.env.action_space.n)
-        else:
-            return best_action  # Con probabilidad (1 - ε), elegir la mejor acción
+        action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.env.action_space.n)
+        best_action = self.policy[state]
+        action_probabilities[best_action] += (1 - self.epsilon)
+        
+        return np.random.choice(self.env.action_space.n, p=action_probabilities)
 
 
     def update(self, episode: List[Tuple[int, int, float]]) -> None:
