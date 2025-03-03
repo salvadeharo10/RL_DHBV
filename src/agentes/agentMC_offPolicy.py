@@ -52,24 +52,26 @@ class MonteCarloOffPolicyAgent(Agent):
     def update(self, episode: List[Tuple[int, int, float]]) -> None:
         """
         Actualiza la tabla Q(s, a) usando Monte Carlo Off-Policy con Importance Sampling.
-        
+    
         Parámetros:
         - episode: lista de tuplas (estado, acción, recompensa) que representan un episodio completo.
         """
         G = 0  # Retorno total acumulado
         W = 1  # Peso para el Importance Sampling
-
+    
         for t in range(len(episode) - 1, -1, -1):
             state, action, reward = episode[t]
             G = self.gamma * G + reward  # Cálculo del retorno acumulado
-            
+    
             # Actualización ponderada de la tabla Q usando Importance Sampling
             self.C[state, action] += W
             self.Q[state, action] += (W / self.C[state, action]) * (G - self.Q[state, action])
-            
-            # Si la acción no es la óptima según la política objetivo, se detiene la actualización
-            if action != np.argmax(self.Q[state]):
+    
+            # Si la acción tomada en el episodio no coincide con la nueva acción óptima, se detiene
+            if action != np.argmax(self.Q[state]): # π(St) ← argmax Q(St, a)
                 break
-            
-            # Se actualiza W para la próxima iteración del Importance Sampling
-            W = W * 1.0 / (self.epsilon / self.env.action_space.n + (1 - self.epsilon) * (action == np.argmax(self.Q[state])))
+    
+            # Actualización del factor de importancia W
+            b_prob = self.epsilon / self.env.action_space.n + (1 - self.epsilon) * (action == np.argmax(self.Q[state]))
+            W = W / b_prob  # W ← W / b(A_t | S_t)
+
