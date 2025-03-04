@@ -1,5 +1,5 @@
 # Importación de módulos o clases
-from .tiling import TileCoding
+from .tiling import TileCodingEnv
 
 
 # Lista de módulos o clases públicas
