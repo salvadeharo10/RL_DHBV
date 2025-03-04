@@ -62,6 +62,45 @@ def pi_star_from_Q_recordVideo(env, Q, video_folder="videos", num_episodes=5000)
     return pi_star, actions, frames, actions_list, visited_states
 
 
+def pi_star_from_weights(env, tcenv, weights, video_folder="videos", num_episodes=5000):
+    print("Grabando ejecución...")
+    done = False
+    state, info = env.reset()
+    active_feature = tcenv.last_active_features
+    frames = []  # Lista para almacenar cada fotograma
+    actions_list = []  # Lista de acciones tomadas
+    visited_states = []  # Lista de estados visitados
+    actions_str = ""  # Cadena para registrar acciones
+    pi_star = {}
+
+    while not done:
+        frame = env.render()
+        frames.append(frame)
+
+        # Seleccionar la mejor acción basada en los pesos
+        action_values = [weights[active_feature, a].sum() for a in range(env.action_space.n)]
+        action = np.argmax(action_values)  # Elegir la acción con mayor valor
+
+        pi_star[tuple(state)] = action
+        actions_str += f"{action}, "
+        actions_list.append(action)
+        visited_states.append(state)
+
+        state, reward, terminated, truncated, info = env.step(action)
+        active_feature = tcenv.last_active_features
+        done = terminated or truncated
+
+    # Renderizar el último frame antes de cerrar el entorno
+    last_frame = env.render()
+    frames.append(last_frame)
+
+    print("Grabación completada.")
+    env.close()
+
+    return pi_star, actions_str, frames, actions_list, visited_states
+
+
+
 def display_gif(gif_path):
     """
     Muestra un GIF en Google Colab o Jupyter Notebook.
