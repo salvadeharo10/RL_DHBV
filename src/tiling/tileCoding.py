@@ -1,4 +1,8 @@
+import numpy as np
+import gymnasium as gym
+import random
 from gymnasium import ObservationWrapper
+
 
 class TileCodingEnv(ObservationWrapper):
     """
