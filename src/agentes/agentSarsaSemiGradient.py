@@ -9,7 +9,7 @@ class SemiGradientSarsaAgent(Agent):
     """
     def __init__(self, tcenv, alpha:int, epsilon: float, decay: bool):
         self.tcenv = tcenv  # Se pasa el entorno con Tile Coding ya configurado
-        self.action_space = np.arange(tcenv.env.action_space.n)  # Espacio de acciones del entorno original
+        self.action_space = tcenv.env.action_space.n # Espacio de acciones del entorno original
         self.alpha = alpha
         self.epsilon = epsilon
         self.decay = decay
@@ -17,7 +17,7 @@ class SemiGradientSarsaAgent(Agent):
 
         # Número total de características en el aproximador lineal
         self.total_features = self.tcenv.n_tilings * np.prod(self.tcenv.bins)
-        self.num_actions = len(self.action_space)
+        self.num_actions = self.action_space
 
         # Inicializamos los pesos con ceros [n_features, n_actions]
         self.w = np.zeros((self.total_features, self.num_actions))
