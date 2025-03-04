@@ -35,19 +35,16 @@ class SemiGradientSarsaAgent(Agent):
         """
         return self.w[active_features, action].sum()
 
-    def get_action(self, active_features, n):
+  def get_action(self, active_features, n):
         """
         Selecciona una acción usando una política ε-soft adaptada a SARSA con gradiente semilineal.
         """
         if self.decay:
-            self.epsilon = min(1.0, 1000.0 / (n + 1))  # Decaimiento de ε
+            self.epsilon = max(0.01, self.epsilon * 0.995)  # Decaimiento suave
     
         q_values = np.array([self.q_value(active_features, a) for a in range(self.num_actions)])  
     
-        if len(np.where(q_values == q_values.max())[0]) == 0:
-            best_action = np.random.choice(range(self.num_actions))
-        else:
-            best_action = np.random.choice(np.where(q_values == q_values.max())[0])
+        best_action = np.argmax(q_values)  # Selección de la mejor acción
     
         action_probabilities = np.ones(self.num_actions) * (self.epsilon / self.num_actions)
         action_probabilities[best_action] += (1 - self.epsilon)
