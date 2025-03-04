@@ -1,0 +1,6 @@
+# Importación de módulos o clases
+from .tiling import TileCoding
+
+
+# Lista de módulos o clases públicas
+__all__ = ['TileCoding']
