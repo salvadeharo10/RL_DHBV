@@ -3,4 +3,4 @@ from .tiling import TileCoding
 
 
 # Lista de módulos o clases públicas
-__all__ = ['TileCoding']
+__all__ = ['TileCodingEnv']
