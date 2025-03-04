@@ -41,17 +41,19 @@ class SemiGradientSarsaAgent(Agent):
         """
         if self.decay:
             self.epsilon = min(1.0, 1000.0 / (n + 1))  # Decaimiento de ε
-
-        q_values = np.array([self.q_value(active_features, a) for a in self.action_space])
+    
+        q_values = np.array([self.q_value(active_features, a) for a in range(self.num_actions)])  
+    
         if len(np.where(q_values == q_values.max())[0]) == 0:
-            best_action = np.random.choice(self.action_space)
+            best_action = np.random.choice(range(self.num_actions))
         else:
             best_action = np.random.choice(np.where(q_values == q_values.max())[0])
-
+    
         action_probabilities = np.ones(self.num_actions) * (self.epsilon / self.num_actions)
         action_probabilities[best_action] += (1 - self.epsilon)
+    
+        return np.random.choice(range(self.num_actions), p=action_probabilities)
 
-        return np.random.choice(self.action_space, p=action_probabilities)
 
     def update(self, active_features, action, reward, next_active_feature, next_action, done):
         """
