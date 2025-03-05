@@ -7,7 +7,7 @@ class AgentSarsa(Agent):
     Implementación de un agente SARSA (State-Action-Reward-State-Action).
     Aprende una política óptima actualizando su función Q(s, a) en cada paso de un episodio.
     """
-    def __init__(self, env: gym.Env, gamma: float, epsilon: float, decay: bool, alpha: float):
+    def __init__(self, env, seed, gamma: float, epsilon: float, decay: bool, alpha: float):
         """
         Inicializa el agente con los parámetros de entrenamiento.
         
@@ -23,6 +23,8 @@ class AgentSarsa(Agent):
         self.epsilon = epsilon
         self.decay = decay
         self.alpha = alpha  # Tasa de aprendizaje
+        self.seed = seed
+        np.random.seed(self.seed)
         
         # Tabla Q para almacenar valores de estado-acción
         self.Q = np.zeros((self.env.observation_space.n, self.env.action_space.n))
