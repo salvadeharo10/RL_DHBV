@@ -24,7 +24,7 @@ class AgentQLearningCont(Agent):
         self.epsilon = epsilon
         self.decay = decay
         self.alpha = alpha  # Tasa de aprendizaje
-        self.num_features = env.n_tilings * np.prod(env.bins)
+        self.num_features = env.n_tilings * env.tile_size
         
         # Tabla Q para almacenar valores de estado-acción
         self.Q = np.zeros((self.num_features, self.env.action_space.n))
