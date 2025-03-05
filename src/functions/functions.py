@@ -100,7 +100,7 @@ def pi_star_from_weights(tcenv, weights, video_folder="videos", num_episodes=500
     return pi_star, actions_str, frames, actions_list, visited_states
     
 
-def pi_star_from_Deep(env, agent, device):
+def pi_star_from_Deep(env, agent, device, feature_dim):
     frames = []
     pi_star = {}
     done = False
