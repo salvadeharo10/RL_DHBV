@@ -100,7 +100,7 @@ def pi_star_from_weights(tcenv, weights, video_folder="videos", num_episodes=500
     return pi_star, actions_str, frames, actions_list, visited_states
     
 
-def pi_star_from_Deep(env, agent, device, feature_dim):
+def pi_star_from_Deep(env, agent, device):
     frames = []
     pi_star = {}
     done = False
@@ -108,6 +108,7 @@ def pi_star_from_Deep(env, agent, device, feature_dim):
     state, info = env.reset()
     active_features = env.last_active_features  # Obtener las active features iniciales
     frames.append(env.render())
+    feature_dim = env.n_tilings * env.tile_size
 
     actions = ""
     agent.model.eval()
