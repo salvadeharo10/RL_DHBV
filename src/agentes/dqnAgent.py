@@ -6,9 +6,6 @@ import random
 from collections import deque
 from agentes import Agent  # Importamos la clase base Agent desde su módulo
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Usando dispositivo: {device}")
-
 
 # --- MODELO DQN ---
 class DQN(nn.Module):
@@ -29,7 +26,7 @@ class DQN(nn.Module):
 
 # --- AGENTE DQN ---
 class DQNAgent(Agent):
-    def __init__(self, env, state_dim, action_dim, gamma=0.99, epsilon=1.0,
+    def __init__(self, env, state_dim, action_dim, device, gamma=0.99, epsilon=1.0,
                  epsilon_min=0.01, epsilon_decay=0.995, lr=0.001):
         super().__init__(env)  # Pasamos env al constructor de la clase base
         self.env = env  # Guardamos el entorno si es necesario
@@ -39,7 +36,8 @@ class DQNAgent(Agent):
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
         self.memory = deque(maxlen=10000)
-
+        self.device = device
+                     
         # Modelos en el dispositivo correcto
         self.model = DQN(state_dim, action_dim, lr).to(device)
         self.target_model = DQN(state_dim, action_dim, lr).to(device)
