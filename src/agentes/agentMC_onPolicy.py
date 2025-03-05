@@ -24,6 +24,7 @@ class MonteCarloOnPolicyAgent(Agent):
         self.gamma = gamma  # Factor de descuento
         self.epsilon = epsilon  # Exploración epsilon-greedy
         self.decay = decay  # Control de decaimiento de epsilon
+        self.seed = seed
         
         # Tabla Q para almacenar valores de estado-acción
         self.Q = np.zeros((env.observation_space.n, env.action_space.n))
