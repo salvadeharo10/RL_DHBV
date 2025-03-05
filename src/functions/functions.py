@@ -259,3 +259,9 @@ def plot_q_values_map(qtable, env, map_size):
     img_title = f"frozenlake_q_values_{map_size}x{map_size}.png"
     plt.savefig(img_title, bbox_inches="tight")
     plt.show()
+    
+
+def to_one_hot(features, feature_dim):
+    state_vector = np.zeros(feature_dim, dtype=np.float32)
+    state_vector[features] = 1.0
+    return state_vector
