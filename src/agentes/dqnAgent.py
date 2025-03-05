@@ -40,8 +40,8 @@ class DQNAgent(Agent):
         self.num_actions =  env.action_space.n
                      
         # Modelos en el dispositivo correcto
-        self.model = DQN(feature_dim, num_actions, lr).to(self.device)
-        self.target_model = DQN(feature_dim, num_actions, lr).to(self.device)
+        self.model = DQN(self.feature_dim, self.num_actions, lr).to(self.device)
+        self.target_model = DQN(self.feature_dim, self.num_actions, lr).to(self.device)
         self.update_target_model()
 
 
