@@ -36,7 +36,7 @@ class DQNAgent(Agent):
         self.epsilon_decay = epsilon_decay
         self.memory = deque(maxlen=10000)
         self.device = device
-        self.feature_dim = env.tile_size * tcenv.n_tilings
+        self.feature_dim = env.tile_size * env.n_tilings
         self.num_actions =  env.action_space.n
                      
         # Modelos en el dispositivo correcto
