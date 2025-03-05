@@ -31,6 +31,7 @@ class DQN(nn.Module):
 class DQNAgent(Agent):
     def __init__(self, state_dim, action_dim, gamma=0.99, epsilon=1.0,
                  epsilon_min=0.01, epsilon_decay=0.995, lr=0.001):
+        super().__init__()  # Llamamos al constructor de la clase base
         self.action_dim = action_dim
         self.gamma = gamma
         self.epsilon = epsilon
@@ -49,7 +50,7 @@ class DQNAgent(Agent):
     def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))
 
-    def act(self, state):
+    def get_action(self, state):
         if np.random.rand() <= self.epsilon:
             return random.randrange(self.action_dim)
 
@@ -58,7 +59,7 @@ class DQNAgent(Agent):
             q_values = self.model(state)
         return torch.argmax(q_values).item()
 
-    def replay(self, batch_size):
+    def update(self, batch_size):
         if len(self.memory) < batch_size:
             return
 
