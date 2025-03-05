@@ -26,21 +26,22 @@ class DQN(nn.Module):
 
 # --- AGENTE DQN ---
 class DQNAgent(Agent):
-    def __init__(self, env, state_dim, action_dim, device, gamma=0.99, epsilon=1.0,
+    def __init__(self, env, device, gamma=0.99, epsilon=1.0,
                  epsilon_min=0.01, epsilon_decay=0.995, lr=0.001):
         super().__init__(env)  # Pasamos env al constructor de la clase base
-        self.env = env  # Guardamos el entorno si es necesario
-        self.action_dim = action_dim
+        self.env = env  # Guardamos el entorno si es necesari
         self.gamma = gamma
         self.epsilon = epsilon
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
         self.memory = deque(maxlen=10000)
         self.device = device
+        self.feature_dim = tcenv.tile_size * tcenv.n_tilings
+        self.num_actions =  tcenv.action_space.n
                      
         # Modelos en el dispositivo correcto
-        self.model = DQN(state_dim, action_dim, lr).to(self.device)
-        self.target_model = DQN(state_dim, action_dim, lr).to(self.device)
+        self.model = DQN(feature_dim, num_actions, lr).to(self.device)
+        self.target_model = DQN(feature_dim, num_actions, lr).to(self.device)
         self.update_target_model()
 
 
@@ -52,7 +53,7 @@ class DQNAgent(Agent):
 
     def get_action(self, state):
         if np.random.rand() <= self.epsilon:
-            return random.randrange(self.action_dim)
+            return random.randrange(self.tcenv.action_space.n)
 
         state = torch.FloatTensor(state).unsqueeze(0).to(self.device)  # Agregar dimensión batch
         with torch.no_grad():
