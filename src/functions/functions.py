@@ -9,7 +9,7 @@ import base64
 from IPython import display
 from IPython.display import HTML
 import seaborn as sns
-
+import torch
 # Para renderizar correctamente en algunos entornos
 import imageio
 
@@ -100,7 +100,7 @@ def pi_star_from_weights(tcenv, weights, video_folder="videos", num_episodes=500
     return pi_star, actions_str, frames, actions_list, visited_states
     
 
-def pi_star_from_Deep(env, agent):
+def pi_star_from_Deep(env, agent, device):
     frames = []
     pi_star = {}
     done = False
