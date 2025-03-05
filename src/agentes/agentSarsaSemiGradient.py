@@ -7,18 +7,18 @@ class SemiGradientSarsaAgent(Agent):
     Implementación de un agente SARSA con gradiente semilineal.
     Utiliza Tile Coding para representar estados y actualizar los pesos de manera eficiente.
     """
-    def __init__(self, tcenv, alpha: float, epsilon: float, decay: bool):
-        self.tcenv = tcenv  # Se pasa el entorno con Tile Coding ya configurado
-        self.action_space = tcenv.env.action_space.n  # Espacio de acciones del entorno original
+    def __init__(self, env, seed, alpha: float, epsilon: float, decay: bool):
+        self.env = env  # Se pasa el entorno con Tile Coding ya configurado
+        self.action_space = env.env.action_space.n  # Espacio de acciones del entorno original
         self.alpha = alpha  # Ajuste de alpha por tilings
         self.epsilon = epsilon
         self.decay = decay
         self.gamma = 0.99  # Factor de descuento
 
         # Número total de características en el aproximador lineal
-        self.total_features = self.tcenv.n_tilings * tcenv.tile_size
+        self.total_features = self.env.n_tilings * env.tile_size
         self.num_actions = self.action_space
-
+        np.random.seed(self.seed)
         # Inicializamos los pesos con ceros [n_features, n_actions]
         self.w = np.zeros((self.total_features, self.num_actions))
 
