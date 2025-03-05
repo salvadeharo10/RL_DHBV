@@ -36,8 +36,8 @@ class DQNAgent(Agent):
         self.epsilon_decay = epsilon_decay
         self.memory = deque(maxlen=10000)
         self.device = device
-        self.feature_dim = tcenv.tile_size * tcenv.n_tilings
-        self.num_actions =  tcenv.action_space.n
+        self.feature_dim = env.tile_size * tcenv.n_tilings
+        self.num_actions =  env.action_space.n
                      
         # Modelos en el dispositivo correcto
         self.model = DQN(feature_dim, num_actions, lr).to(self.device)
@@ -53,7 +53,7 @@ class DQNAgent(Agent):
 
     def get_action(self, state):
         if np.random.rand() <= self.epsilon:
-            return random.randrange(self.tcenv.action_space.n)
+            return random.randrange(self.num_actions)
 
         state = torch.FloatTensor(state).unsqueeze(0).to(self.device)  # Agregar dimensión batch
         with torch.no_grad():
