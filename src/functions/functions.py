@@ -98,8 +98,50 @@ def pi_star_from_weights(tcenv, weights, video_folder="videos", num_episodes=500
     tcenv.close()
 
     return pi_star, actions_str, frames, actions_list, visited_states
+    
 
+def pi_star_from_Deep(env, agent):
+    frames = []
+    pi_star = {}
+    done = False
 
+    state, info = env.reset()
+    active_features = env.last_active_features  # Obtener las active features iniciales
+    frames.append(env.render())
+
+    actions = ""
+    agent.model.eval()
+
+    with torch.no_grad():
+
+        while not done:
+            # Crear tensor de estado con active features en formato one-hot
+            state_tensor = torch.zeros(1, feature_dim, device=device, dtype=torch.float32)
+            state_tensor[0, active_features] = 1
+
+            # Seleccionar la mejor acción
+            action = agent.model(state_tensor).argmax().item()
+
+            # Convertir obs a tupla si es necesario
+            state_tuple = tuple(state) if isinstance(state, (list, np.ndarray)) else state
+            pi_star[state_tuple] = action
+            actions += f"{action}, "
+
+            # Tomar acción en el entorno
+            obs, reward, terminated, truncated, info = env.step(action)
+            frame = env.render()
+            frames.append(frame)
+
+            done = terminated or truncated
+            active_features = env.last_active_features  # Actualizar active features
+
+    last_frame = env.render()
+    frames.append(last_frame)
+
+    print(f"Grabación completada.")
+    env.close()
+
+    return pi_star, actions, frames
 
 def display_gif(gif_path):
     """
