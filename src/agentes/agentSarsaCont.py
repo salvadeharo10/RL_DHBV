@@ -26,7 +26,7 @@ class AgentSarsaCont(Agent):
         self.alpha = alpha  # Tasa de aprendizaje
         
         # Tabla Q para almacenar valores de estado-acción
-        self.num_features = env.n_tilings * np.prod(env.bins)
+        self.num_features = env.n_tilings * env.tile_size
         self.Q = np.zeros((self.num_features , self.env.action_space.n))
 
     def get_q(self, active_features, action):
