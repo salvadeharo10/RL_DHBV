@@ -29,9 +29,10 @@ class DQN(nn.Module):
 
 # --- AGENTE DQN ---
 class DQNAgent(Agent):
-    def __init__(self, state_dim, action_dim, gamma=0.99, epsilon=1.0,
+    def __init__(self, env, state_dim, action_dim, gamma=0.99, epsilon=1.0,
                  epsilon_min=0.01, epsilon_decay=0.995, lr=0.001):
-        super().__init__()  # Llamamos al constructor de la clase base
+        super().__init__(env)  # Pasamos env al constructor de la clase base
+        self.env = env  # Guardamos el entorno si es necesario
         self.action_dim = action_dim
         self.gamma = gamma
         self.epsilon = epsilon
@@ -43,6 +44,7 @@ class DQNAgent(Agent):
         self.model = DQN(state_dim, action_dim, lr).to(device)
         self.target_model = DQN(state_dim, action_dim, lr).to(device)
         self.update_target_model()
+
 
     def update_target_model(self):
         self.target_model.load_state_dict(self.model.state_dict())
