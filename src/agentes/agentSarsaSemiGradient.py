@@ -16,7 +16,7 @@ class SemiGradientSarsaAgent(Agent):
         self.gamma = 0.99  # Factor de descuento
 
         # Número total de características en el aproximador lineal
-        self.total_features = self.tcenv.n_tilings * np.prod(self.tcenv.bins)
+        self.total_features = self.tcenv.n_tilings * tcenv.tile_size
         self.num_actions = self.action_space
 
         # Inicializamos los pesos con ceros [n_features, n_actions]
