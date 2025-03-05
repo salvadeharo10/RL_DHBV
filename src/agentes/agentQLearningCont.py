@@ -3,7 +3,7 @@ import gymnasium as gym
 import numpy as np
 from agentes import Agent  # Importamos la clase base Agent desde su módulo
 
-class AgentQLearning(Agent):
+class AgentQLearningCont(Agent):
     """
     Implementación de un agente Q-Learning.
     Aprende una política óptima actualizando su función Q(s, a) en cada paso de un episodio.
