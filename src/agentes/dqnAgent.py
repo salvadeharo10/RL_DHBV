@@ -39,8 +39,8 @@ class DQNAgent(Agent):
         self.device = device
                      
         # Modelos en el dispositivo correcto
-        self.model = DQN(state_dim, action_dim, lr).to(device)
-        self.target_model = DQN(state_dim, action_dim, lr).to(device)
+        self.model = DQN(state_dim, action_dim, lr).to(self.device)
+        self.target_model = DQN(state_dim, action_dim, lr).to(self.device)
         self.update_target_model()
 
 
@@ -54,7 +54,7 @@ class DQNAgent(Agent):
         if np.random.rand() <= self.epsilon:
             return random.randrange(self.action_dim)
 
-        state = torch.FloatTensor(state).unsqueeze(0).to(device)  # Agregar dimensión batch
+        state = torch.FloatTensor(state).unsqueeze(0).to(self.device)  # Agregar dimensión batch
         with torch.no_grad():
             q_values = self.model(state)
         return torch.argmax(q_values).item()
@@ -65,8 +65,8 @@ class DQNAgent(Agent):
 
         minibatch = random.sample(self.memory, batch_size)
         for state, action, reward, next_state, done in minibatch:
-            state = torch.FloatTensor(state).to(device)
-            next_state = torch.FloatTensor(next_state).to(device)
+            state = torch.FloatTensor(state).to(self.device)
+            next_state = torch.FloatTensor(next_state).to(self.device)
 
             with torch.no_grad():
                 target = reward
