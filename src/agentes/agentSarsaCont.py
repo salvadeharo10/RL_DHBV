@@ -48,22 +48,26 @@ class AgentSarsaCont(Agent):
         Selecciona una acción siguiendo una política ε-soft.
         
         Parámetros:
-        - state: estado actual del agente.
-        - n: número de episodios transcurridos (para el decaimiento de ε si está activado).
+        - active_features: Características activas en el estado actual.
+        - n: Número de episodios transcurridos (para el decaimiento de ε si está activado).
         
         Retorna:
         - Acción seleccionada según la política ε-soft.
         """
         if self.decay:
-            self.epsilon = min(1.0, 1000.0 / (n + 1))
+            self.epsilon = min(1.0, 1000.0 / (n + 1))  # Decaimiento de ε
         
-        action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.num_actions )
-        q_values = np.array([get_q(active_features, a) for a in range(self.num_actions )])
+        num_actions = self.env.action_space.n
+        q_values = np.array([self.get_q(active_features, a) for a in range(num_actions)])  # Llamada correcta a self.get_q
+    
         best_action = np.argmax(q_values)  # Selección de la mejor acción
-      
-        action_probabilities[best_action] += (1 - self.epsilon)
-        
-        return np.random.choice(self.env.action_space.n, p=action_probabilities)
+    
+        # Crear la distribución de probabilidad ε-soft
+        action_probabilities = np.full(num_actions, self.epsilon / num_actions)  # Distribuye ε entre todas las acciones
+        action_probabilities[best_action] += (1 - self.epsilon)  # Asigna la mayor probabilidad a la mejor acción
+    
+        return np.random.choice(num_actions, p=action_probabilities)  # Seleccionar acción basada en la distribución
+
     
     def update(self, active_feature: int, action: int, reward: float, next_active_feature: int, next_action: int, terminated: bool, truncated: bool) -> None:
         """
