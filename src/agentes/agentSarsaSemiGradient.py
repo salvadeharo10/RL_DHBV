@@ -14,11 +14,13 @@ class SemiGradientSarsaAgent(Agent):
         self.epsilon = epsilon
         self.decay = decay
         self.gamma = 0.99  # Factor de descuento
+        self.seed = seed
 
         # Número total de características en el aproximador lineal
         self.total_features = self.env.n_tilings * env.tile_size
         self.num_actions = self.action_space
         np.random.seed(self.seed)
+        
         # Inicializamos los pesos con ceros [n_features, n_actions]
         self.w = np.zeros((self.total_features, self.num_actions))
 
