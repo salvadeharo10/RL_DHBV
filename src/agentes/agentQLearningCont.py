@@ -25,9 +25,10 @@ class AgentQLearningCont(Agent):
         self.decay = decay
         self.alpha = alpha  # Tasa de aprendizaje
         self.num_features = env.n_tilings * env.tile_size
+        self.num_actions = self.env.action_space.n
         
         # Tabla Q para almacenar valores de estado-acción
-        self.Q = np.zeros((self.num_features, self.env.action_space.n))
+        self.Q = np.zeros((self.num_features, self.num_actions))
     
     def get_q(self, active_features, action):
         """
@@ -56,7 +57,7 @@ class AgentQLearningCont(Agent):
         if self.decay:
             self.epsilon = min(1.0, 1000.0 / (n + 1))
         
-        action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.env.action_space.n)
+        action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.num_actions)
         q_values = np.array([self.q_value(active_features, a) for a in range(self.num_actions)])
         best_action = np.argmax(q_values)  # Selección de la mejor acción
       
