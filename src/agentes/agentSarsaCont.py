@@ -58,7 +58,7 @@ class AgentSarsaCont(Agent):
             self.epsilon = min(1.0, 1000.0 / (n + 1))
         
         action_probabilities = np.ones(self.env.action_space.n) * (self.epsilon / self.num_actions )
-        q_values = np.array([self.q_value(active_features, a) for a in range(self.num_actions )])
+        q_values = np.array([get_q(active_features, a) for a in range(self.num_actions )])
         best_action = np.argmax(q_values)  # Selección de la mejor acción
       
         action_probabilities[best_action] += (1 - self.epsilon)
