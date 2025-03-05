@@ -9,7 +9,7 @@ class MonteCarloOffPolicyAgent(Agent):
     Implementación de un agente de Aprendizaje por Refuerzo basado en Monte Carlo Off-Policy.
     Aprende una política óptima utilizando Importance Sampling para actualizar la función de valor Q(s, a).
     """
-    def __init__(self, env: gym.Env, gamma: float = 0.99, epsilon: float = 0.1, decay: bool = False):
+    def __init__(self, env, seed, gamma: float = 0.99, epsilon: float = 0.1, decay: bool = False):
         """
         Inicializa el agente con los parámetros de entrenamiento.
         
@@ -23,6 +23,8 @@ class MonteCarloOffPolicyAgent(Agent):
         self.gamma = gamma
         self.epsilon = epsilon
         self.decay = decay
+        self.seed = seed
+        np.random.seed(self.seed)
         
         # Inicialización de las tablas Q y C (para Importance Sampling)
         self.Q = np.zeros((env.observation_space.n, env.action_space.n))
