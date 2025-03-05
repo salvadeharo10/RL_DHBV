@@ -26,7 +26,7 @@ class DQN(nn.Module):
 
 # --- AGENTE DQN ---
 class DQNAgent(Agent):
-    def __init__(self, env, device, gamma=0.99, epsilon=1.0,
+    def __init__(self, env, seed, device, gamma=0.99, epsilon=1.0,
                  epsilon_min=0.01, epsilon_decay=0.995, lr=0.001):
         super().__init__(env)  # Pasamos env al constructor de la clase base
         self.env = env  # Guardamos el entorno si es necesari
@@ -38,6 +38,17 @@ class DQNAgent(Agent):
         self.device = device
         self.feature_dim = env.tile_size * env.n_tilings
         self.num_actions =  env.action_space.n
+        self.seed = seed
+        np.random.seed(self.seed)
+        random.seed(self.seed)
+
+        torch.manual_seed(self.seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(self.seed)
+            torch.cuda.manual_seed_all(self.seed)  # Para múltiples GPUs
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = False  # Puede afectar el rendimiento
+                     
                      
         # Modelos en el dispositivo correcto
         self.model = DQN(self.feature_dim, self.num_actions, lr).to(self.device)
