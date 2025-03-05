@@ -9,7 +9,7 @@ class MonteCarloOnPolicyAgent(Agent):
     Implementación de un agente de Aprendizaje por Refuerzo basado en Monte Carlo On-Policy.
     Aprende una política óptima a partir de episodios completos y actualiza la función de valor Q(s, a).
     """
-    def __init__(self, env: gym.Env, gamma: float = 0.99, epsilon: float = 0.1, decay: bool = False):
+    def __init__(self, env, seed, gamma: float = 0.99, epsilon: float = 0.1, decay: bool = False):
         """
         Inicializa el agente con los parámetros de entrenamiento.
         
@@ -27,6 +27,7 @@ class MonteCarloOnPolicyAgent(Agent):
         
         # Tabla Q para almacenar valores de estado-acción
         self.Q = np.zeros((env.observation_space.n, env.action_space.n))
+        np.random.seed(self.seed)
         
         # Diccionario para almacenar retornos de cada par (estado, acción)
         # a lo largo de todos los episodios que dure el experimento
