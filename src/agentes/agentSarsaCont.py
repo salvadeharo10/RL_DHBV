@@ -29,7 +29,7 @@ class AgentSarsaCont(Agent):
         self.num_features = env.n_tilings * np.prod(env.bins)
         self.Q = np.zeros((self.num_features , self.env.action_space.n))
 
-  def get_q(self, active_features, action):
+    def get_q(self, active_features, action):
         """
         Calcula el valor de Q(s, a) como la suma de los pesos de las features activas.
 
