@@ -26,7 +26,7 @@ class DQN(nn.Module):
         return self.fc(x)
 
 # --- AGENTE DQN ---
-class DQNAgent(Agent):
+class DQNAgentNew(Agent):
     def __init__(self, env, seed, device, gamma=0.99, epsilon=1.0,
                  epsilon_min=0.01, epsilon_decay=0.9995, lr=0.01):
         super().__init__(env)
