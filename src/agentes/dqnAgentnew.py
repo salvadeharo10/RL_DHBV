@@ -27,7 +27,7 @@ class DQN(nn.Module):
 # --- AGENTE DQN ---
 class DQNAgentNew(Agent):
     def __init__(self, env, seed, device, gamma=0.99, epsilon=1.0,
-                 epsilon_min=0.05, epsilon_decay=0.999, lr=0.01):
+                 epsilon_min=0.0001, epsilon_decay=0.999, lr=0.01):
         super().__init__(env)
         self.env = env
         self.gamma = gamma
