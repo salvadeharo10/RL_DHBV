@@ -14,7 +14,6 @@ class DQN(nn.Module):
         self.fc = nn.Sequential(
             nn.Linear(input_dim, 128),
             nn.ReLU(),
-            nn.BatchNorm1d(128),
             nn.Linear(128, 64),
             nn.ReLU(),
             nn.Linear(64, output_dim)
