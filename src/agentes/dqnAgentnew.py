@@ -12,9 +12,10 @@ class DQN(nn.Module):
     def __init__(self, input_dim, output_dim, lr=0.001):
         super(DQN, self).__init__()
         self.fc = nn.Sequential(
-            nn.Linear(input_dim, 64),
+            nn.Linear(input_dim, 128),
             nn.ReLU(),
-            nn.Linear(64, 64),
+            nn.BatchNorm1d(128),
+            nn.Linear(128, 64),
             nn.ReLU(),
             nn.Linear(64, output_dim)
         )
@@ -25,9 +26,9 @@ class DQN(nn.Module):
         return self.fc(x)
 
 # --- AGENTE DQN ---
-class DQNAgentNew(Agent):
+class DQNAgent(Agent):
     def __init__(self, env, seed, device, gamma=0.99, epsilon=1.0,
-                 epsilon_min=0.0001, epsilon_decay=0.999, lr=0.01):
+                 epsilon_min=0.01, epsilon_decay=0.9995, lr=0.01):
         super().__init__(env)
         self.env = env
         self.gamma = gamma
@@ -57,6 +58,7 @@ class DQNAgentNew(Agent):
         self.target_model.load_state_dict(self.model.state_dict())
 
     def remember(self, state, action, reward, next_state, done):
+        reward += 1  # Penalización menos severa
         self.memory.append((state, action, reward, next_state, done))
 
     def get_action(self, state):
@@ -80,9 +82,7 @@ class DQNAgentNew(Agent):
             next_state = torch.FloatTensor(next_state).to(self.device)
 
             with torch.no_grad():
-                target = reward
-                if not done:
-                    target += self.gamma * torch.max(self.target_model(next_state)).item()
+                target = reward + (1 - done) * self.gamma * self.target_model(next_state)[self.model(next_state).argmax().item()]
 
             q_values = self.model(state)
             target_f = q_values.clone()
