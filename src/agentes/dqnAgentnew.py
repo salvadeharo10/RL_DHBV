@@ -72,31 +72,32 @@ class DQNAgentNew(Agent):
     def update(self, batch_size):
         if len(self.memory) < batch_size:
             return
-
+    
         minibatch = random.sample(self.memory, batch_size)
         states, targets = [], []
-
+    
         for state, action, reward, next_state, done in minibatch:
-            state = torch.FloatTensor(state).to(self.device)
-            next_state = torch.FloatTensor(next_state).to(self.device)
-
+            state = torch.FloatTensor(state).unsqueeze(0).to(self.device)
+            next_state = torch.FloatTensor(next_state).unsqueeze(0).to(self.device)
+    
             with torch.no_grad():
-                target = reward + (1 - done) * self.gamma * self.target_model(next_state)[self.model(next_state).argmax().item()]
-
+                target = reward + (1 - done) * self.gamma * self.target_model(next_state).max(1)[0].detach()
+    
             q_values = self.model(state)
             target_f = q_values.clone()
-            target_f[action] = target
-
-            states.append(state)
-            targets.append(target_f)
-
+            target_f[0][action] = target
+    
+            states.append(state.squeeze(0))
+            targets.append(target_f.squeeze(0))
+    
         states = torch.stack(states)
         targets = torch.stack(targets)
-        
+    
         loss = self.model.criterion(self.model(states), targets)
         self.model.optimizer.zero_grad()
         loss.backward()
         self.model.optimizer.step()
+    
+        # Decay de epsilon correctamente
+        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
 
-        if self.epsilon > self.epsilon_min:
-            self.epsilon *= self.epsilon_decay
