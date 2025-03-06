@@ -6,7 +6,8 @@ from .agentSARSA import AgentSarsa
 from .agentQLearning import AgentQLearning
 from .agentSarsaSemiGradient import SemiGradientSarsaAgent
 from .dqnAgent import DQNAgent
+from .dqnAgentnew import DQNAgentNew
 
 
 # Lista de módulos o clases públicas
-__all__ = ['Agent', 'MonteCarloOnPolicyAgent', 'MonteCarloOffPolicyAgent', 'AgentSarsa', 'AgentQLearning', 'SemiGradientSarsaAgent', 'DQNAgent']
+__all__ = ['Agent', 'MonteCarloOnPolicyAgent', 'MonteCarloOffPolicyAgent', 'AgentSarsa', 'AgentQLearning', 'SemiGradientSarsaAgent', 'DQNAgent', 'DQNAgentNew']
