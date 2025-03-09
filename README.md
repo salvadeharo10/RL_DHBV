@@ -19,5 +19,10 @@ En este repositorio se recopila el trabajo que tiene como objetivo abordar el pr
 ## Instalación y uso
 Se recomienda la ejecución de los notebooks en Google Colab. Para este fin, se aconseja abrir el notebook `main.ipynb`, donde se encontrarán enlaces directos para abrir los notebooks con los distintos experimentos en Colab.
 
-## Tecnologías utilizadas
-Python, GitHub y Google Colab.
+## Tecnologías utilizadas y entorno de desarrollo
+El proyecto ha sido desarrollado utilizando Python y herramientas del ecosistema de aprendizaje automático y análisis de datos. Se ha utilizado Google Colab como entorno de ejecución para facilitar la ejecución remota de los experimentos. 
+
+### **Lenguaje y herramientas principales**
+- **Python** → Lenguaje principal del proyecto.
+- **Google Colab** → Entorno de ejecución basado en Jupyter Notebooks para pruebas y experimentos.
+- **GitHub** → Control de versiones y almacenamiento del código.
