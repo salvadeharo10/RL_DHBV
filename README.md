@@ -2,9 +2,9 @@
 
 ## Información
 - **Alumnos:**
-  - de Haro Orenes, Salvador
-  - Vidal García, Miguel
-  - Belmonte Martínez, Jose María
+  - de Haro Orenes, Salvador - `salvadorde.haroo@um.es`
+  - Vidal García, Miguel - `miguel.vidalg@um.es`
+  - Belmonte Martínez, Jose María - `josemaria.belmontem@um.es`
  
 ## Descripción
 En este repositorio se recopila el trabajo que tiene como objetivo abordar el problema de aprendizaje por refuerzo.
