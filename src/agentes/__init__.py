@@ -9,4 +9,4 @@ from .dqnAgent import DQNAgent
 
 
 # Lista de módulos o clases públicas
-__all__ = ['Agent', 'MonteCarloOnPolicyAgent', 'MonteCarloOffPolicyAgent', 'AgentSarsa', 'AgentQLearning', 'SemiGradientSarsaAgent', 'DQNAgent', 'DQNAgentNew']
+__all__ = ['Agent', 'MonteCarloOnPolicyAgent', 'MonteCarloOffPolicyAgent', 'AgentSarsa', 'AgentQLearning', 'SemiGradientSarsaAgent', 'DQNAgent']
