@@ -13,7 +13,7 @@ En este repositorio se recopila el trabajo que tiene como objetivo abordar el pr
 - `src/` → Código Python relacionado con los experimentos: Implementación de los algoritmos y sus políticas; Implementación de los brazos con distintas distribuciones de probabilidad; Otras funcionalidades, tales como plotear gráficas.
 - `docs/` → Documentación en PDF sobre el trabajo realizado.
 - `main.ipynb` → Notebook principal de presentación, que permite navegar entre los distintos notebooks con los experimentos.
-- `ReinforcementLearning.ipynb` → Experimentos para la familia de algoritmos $\epsilon$-greedy.
+- `MonteCarloTodasLasVisitas.ipynb` → Estudio de la familia de algoritmos de aprendizaje por refuerzo
 
 
 ## Instalación y uso
