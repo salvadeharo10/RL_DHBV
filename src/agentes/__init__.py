@@ -6,7 +6,6 @@ from .agentSARSA import AgentSarsa
 from .agentQLearning import AgentQLearning
 from .agentSarsaSemiGradient import SemiGradientSarsaAgent
 from .dqnAgent import DQNAgent
-from .dqnAgentnew import DQNAgentNew
 
 
 # Lista de módulos o clases públicas
